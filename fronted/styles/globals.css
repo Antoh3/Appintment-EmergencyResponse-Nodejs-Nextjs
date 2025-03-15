@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --ring: 215 20.2% 65.1%;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */
+
+body {
+    color: #1a1a1a;
+    background: white !important;
+    /*color: rgb(var(--foreground-rgb));*/
+    /*background: linear-gradient(*/
+    /*        to bottom,*/
+    /*        transparent,*/
+    /*        rgb(var(--background-end-rgb))*/
+    /*) rgb(var(--background-start-rgb));*/
+}
+
+/* .bg-\[url\(\/homepage_ambulance.webp\)\] {
+    background-image: url(/homepage_ambulance.webp);
+  } */
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+    .data-table {
+        @apply z-10 w-full overflow-hidden rounded-lg border border-zinc-300 shadow-lg;
+    }
+    .shad-table {
+        @apply rounded-lg overflow-hidden !important;
+    }
+    .shad-table-row-header {
+        @apply border-b border-zinc-800 text-zinc-200 hover:bg-transparent !important;
+    }
+    .shad-table-row {
+        @apply border-b border-zinc-500 text-zinc-200 !important;
+    }
+    .shad-table-btn {
+        @apply border border-zinc-300 cursor-pointer bg-white text-black !important;
+    }
+    .status-badge {
+      @apply flex w-full items-center gap-2 rounded px-3 py-2;
+    }
+    .text-12-semibold {
+      @apply text-[12px] leading-[16px] font-semibold;
+    }
+}

@@ -1,0 +1,57 @@
+// Axios instance with token refresh logic
+import axios from "axios";
+import { useRouter } from "next/router";
+
+const createAxiosInstance = () => {
+  const instance = axios.create({
+    baseURL: "http://localhost:5000", // Update with your backend base URL
+  });
+
+  instance.interceptors.request.use((config) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  });
+
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      const router = useRouter();
+
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+          console.error("No refresh token available");
+          router.push("/auth/login");
+          return Promise.reject(error);
+        }
+
+        try {
+          const response = await axios.post("/auth/refresh", { refreshToken });
+          const { accessToken } = response.data;
+
+          // Update tokens
+          localStorage.setItem("accessToken", accessToken);
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
+          return instance(originalRequest); // Retry the original request
+        } catch (refreshError) {
+          console.error("Failed to refresh token", refreshError);
+          router.push("/auth/login");
+          return Promise.reject(refreshError);
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return instance;
+};
+
+export default createAxiosInstance;
